@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter
 import time
 import sqlite3
 import random
@@ -14,6 +14,10 @@ l = login.cursor()
 c = sqlite3.connect("medicine.db")
 cur = c.cursor()
 columns = ('Sl No', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
+menu1='Main menu'
+mouse1='<MouseWheel>'
+query2="select *from med"
+listbox1='<<ListboxSelect>>'
 
 def open_win():
     global apt, flag
@@ -48,8 +52,7 @@ def delete_stock():
     Label(d, text='Product').grid(row=2, column=0)
     Label(d, text='Qty.  Exp.dt.     Cost                           ').grid(row=2, column=1)
     ren()
-    b = Button(d, width=20, text='Delete', bg='red', fg='white', command=delt).grid(row=0, column=3)
-    b = Button(d, width=20, text='Main Menu', bg='green', fg='white', command=main_menu).grid(row=5, column=3)
+    b = Button(d, width=20, text=menu1, bg='green', fg='white', command=main_menu).grid(row=5, column=3)
     d.mainloop()
 
 def ren():
@@ -71,9 +74,9 @@ def ren():
     vsb.grid(row=3, column=2, sticky=N + S)
     lb1.grid(row=3, column=0)
     lb2.grid(row=3, column=1)
-    lb1.bind('<MouseWheel>', onmousewheel)
-    lb2.bind('<MouseWheel>', onmousewheel)
-    cur.execute("select *from med")
+    lb1.bind(mouse1, onmousewheel)
+    lb2.bind(mouse1, onmousewheel)
+    cur.execute(query2)
     for i in cur:
         cx += 1
         s1 = [str(i[0]), str(i[1])]
@@ -81,7 +84,7 @@ def ren():
         lb1.insert(cx, '. '.join(s1))
         lb2.insert(cx, '   '.join(s2))
     c.commit()
-    lb1.bind('<<ListboxSelect>>', sel_del)
+    lb1.bind(listbox1, sel_del)
 
 def sel_del(e):
     global lb1, d, cur, c, p, sl2
@@ -89,7 +92,7 @@ def sel_del(e):
     print(p)
     x = 0
     sl2 = ''
-    cur.execute("select * from med")
+    cur.execute(query2)
     for i in cur:
         print(x, p[0])
         if x == int(p[0]):
@@ -99,7 +102,7 @@ def sel_del(e):
     c.commit()
     print(sl2)
     Label(d, text=' ', bg='white', width=20).grid(row=0, column=1)
-    cur.execute('Select * from med')
+    cur.execute(query2)
     for i in cur:
         if i[0] == sl2:
             Label(d, text=i[0] + '. ' + i[1], bg='white').grid(row=0, column=1)
