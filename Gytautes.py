@@ -19,7 +19,7 @@ mouse1='<MouseWheel>'
 query2="select *from med"
 listbox1='<<ListboxSelect>>'
 
-def open_win():
+def Open_Window():
     global apt, flag
     flag = 'apt'
     apt = Tk()
@@ -41,7 +41,7 @@ def open_win():
     Button(apt, text='Logout', bg='red', fg='white', width=20, command=again).grid(row=6, column=2)
     apt.mainloop()
 
-def delete_stock():
+def Delete_Stock():
     global cur, c, flag, lb1, d
     apt.destroy()
     flag = 'd'
@@ -51,11 +51,11 @@ def delete_stock():
     Label(d, text='', width=30, bg='white').grid(row=0, column=1)
     Label(d, text='Product').grid(row=2, column=0)
     Label(d, text='Qty.  Exp.dt.     Cost                           ').grid(row=2, column=1)
-    ren()
+    Regenerate_List()
     b = Button(d, width=20, text=menu1, bg='green', fg='white', command=main_menu).grid(row=5, column=3)
     d.mainloop()
 
-def ren():
+def Regenerate_List():
     global lb1, d, cur, c
 
     def onvsb(*args):
@@ -84,9 +84,9 @@ def ren():
         lb1.insert(cx, '. '.join(s1))
         lb2.insert(cx, '   '.join(s2))
     c.commit()
-    lb1.bind(listbox1, sel_del)
+    lb1.bind(listbox1, Medicaments_Delete)
 
-def sel_del(e):
+def Medicaments_Delete(e):
     global lb1, d, cur, c, p, sl2
     p = lb1.curselection()
     print(p)
