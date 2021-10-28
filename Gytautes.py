@@ -6,21 +6,22 @@ import tempfile
 import win32api
 import win32print
 
+global apt, flag, cursor1, c, lb1, d, p, sl2
 f = ''
 flag = ''
 flags = ''
 login = sqlite3.connect("admin.db")
 l = login.cursor()
 c = sqlite3.connect("medicine.db")
-cur = c.cursor()
+cursor1 = c.cursor()
 columns = ('Sl No', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
 menu1='Main menu'
 mouse1='<MouseWheel>'
 query2="select *from med"
 listbox1='<<ListboxSelect>>'
 
+
 def open_window():
-    global apt, flag
     flag = 'apt'
     apt = Tk()
     apt.title("Interface")
@@ -42,7 +43,6 @@ def open_window():
     apt.mainloop()
 
 def delete_stock():
-    global cur, c, flag, lb1, d
     apt.destroy()
     flag = 'd'
     d = Tk()
@@ -56,7 +56,6 @@ def delete_stock():
     d.mainloop()
 
 def regenerate_list():
-    global lb1, d, cur, c
 
     def onvsb(*args):
         lb1.yview(*args)
@@ -76,8 +75,8 @@ def regenerate_list():
     lb2.grid(row=3, column=1)
     lb1.bind(mouse1, onmousewheel)
     lb2.bind(mouse1, onmousewheel)
-    cur.execute(query2)
-    for i in cur:
+    cursor1.execute(query2)
+    for i in cursor1:
         cx += 1
         s1 = [str(i[0]), str(i[1])]
         s2 = [str(i[3]), str(i[6]), str(i[4])]
@@ -87,13 +86,12 @@ def regenerate_list():
     lb1.bind(listbox1, medicaments_delete)
 
 def medicaments_delete(e):
-    global lb1, d, cur, c, p, sl2
     p = lb1.curselection()
     print(p)
     x = 0
     sl2 = ''
-    cur.execute(query2)
-    for i in cur:
+    cursor1.execute(query2)
+    for i in cursor1:
         print(x, p[0])
         if x == int(p[0]):
             sl2 = i[0]
@@ -102,8 +100,8 @@ def medicaments_delete(e):
     c.commit()
     print(sl2)
     Label(d, text=' ', bg='white', width=20).grid(row=0, column=1)
-    cur.execute(query2)
-    for i in cur:
+    cursor1.execute(query2)
+    for i in cursor1:
         if i[0] == sl2:
             Label(d, text=i[0] + '. ' + i[1], bg='white').grid(row=0, column=1)
     c.commit()
